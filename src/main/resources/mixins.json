@@ -1,0 +1,9 @@
+{
+	"$schema": "https://schemastore.org/sponge-mixins",
+	"mixins": [
+		"RegistryDataLoaderMixin",
+		"ReloadableServerRegistriesMixin"
+	],
+	"package": "top.qwertycxz.loadabledialog.mixin",
+	"required": true
+}

@@ -1,5 +1,5 @@
 {
-	"$schema": "https://www.schemastore.org/fabric.mod",
+	"$schema": "https://schemastore.org/fabric.mod",
 	"authors": [
 		{
 			"contact": {
@@ -23,22 +23,16 @@
 		}
 	},
 	"depends": {
-		"fabric-permissions-api-v0": "*",
 		"minecraft": "$minecraft"
 	},
 	"description": "$description",
-	"entrypoints": {
-		"server": [
-			"top.qwertycxz.metadatawildcard.MetadataWildcard"
-		]
-	},
 	"environment": "server",
 	"icon": "icon.png",
 	"id": "$id",
 	"license": "$license",
+	"mixins": [
+		"mixins.json"
+	],
 	"name": "$name",
-	"suggests": {
-		"luckperms": "*"
-	},
 	"version": "$version"
 }
