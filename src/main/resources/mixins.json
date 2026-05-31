@@ -1,6 +1,7 @@
 {
 	"$schema": "https://schemastore.org/sponge-mixins",
 	"mixins": [
+		"MinecraftServerMixin",
 		"NamedInvoker",
 		"RegistryDataLoaderMixin",
 		"WorldLoaderMixin"
