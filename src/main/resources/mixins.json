@@ -4,6 +4,7 @@
 		"MinecraftServerMixin",
 		"NamedInvoker",
 		"RegistryDataLoaderMixin",
+		"ServerPlayerMixin",
 		"WorldLoaderMixin"
 	],
 	"package": "top.qwertycxz.loadabledialog.mixin",

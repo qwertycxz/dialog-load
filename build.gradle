@@ -251,7 +251,7 @@ spotless {
 			'UnnecessaryModifier',
 			'UnnecessarySemicolon',
 			'UseCollectionIsEmpty',
-			'UseDiamondOperatorJdk8',
+			// 'UseDiamondOperatorJdk8',
 			'UsePredefinedStandardCharset',
 			'UseStringIsEmpty',
 			'UseTextBlocks',

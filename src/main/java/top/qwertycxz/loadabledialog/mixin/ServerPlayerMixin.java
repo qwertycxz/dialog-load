@@ -1,0 +1,45 @@
+package top.qwertycxz.loadabledialog.mixin;
+
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static java.util.Objects.requireNonNull;
+import static java.util.Optional.empty;
+import static net.minecraft.core.Holder.direct;
+import static net.minecraft.network.chat.Component.translatable;
+import static net.minecraft.server.dialog.DialogAction.CLOSE;
+import static net.minecraft.server.dialog.NoticeDialog.DEFAULT_ACTION;
+import static net.minecraft.server.dialog.body.PlainMessage.DEFAULT_WIDTH;
+import static top.qwertycxz.loadabledialog.RegistryInfoLookupImpl.STALE_PLAYERS;
+
+import net.minecraft.core.Holder;
+import net.minecraft.server.dialog.CommonDialogData;
+import net.minecraft.server.dialog.Dialog;
+import net.minecraft.server.dialog.NoticeDialog;
+import net.minecraft.server.dialog.body.PlainMessage;
+import net.minecraft.server.level.ServerPlayer;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+
+@Mixin(ServerPlayer.class)
+@NullMarked
+public abstract class ServerPlayerMixin {
+	@Unique
+	private static final Holder<@NonNull Dialog> STALE_DIALOG = direct(
+		new NoticeDialog(
+			new CommonDialogData(
+				translatable("dialog.stale.title"), requireNonNull(empty()), true, true, CLOSE, requireNonNull(singletonList((@Nullable PlainMessage)new PlainMessage(translatable("dialog.stale.body"), DEFAULT_WIDTH))), requireNonNull(emptyList())
+			), DEFAULT_ACTION
+		)
+	);
+
+	@ModifyArg(method = "openDialog", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/protocol/common/ClientboundShowDialogPacket;<init>(Lnet/minecraft/core/Holder;)V"))
+	private Holder<@NonNull Dialog> staleDialog(Holder<@NonNull Dialog> dialog) {
+		if (STALE_PLAYERS.contains((Object)this)) return STALE_DIALOG;
+		return dialog;
+	}
+}

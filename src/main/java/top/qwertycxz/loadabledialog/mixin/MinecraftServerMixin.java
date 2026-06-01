@@ -3,6 +3,7 @@ package top.qwertycxz.loadabledialog.mixin;
 import static java.util.concurrent.CompletableFuture.failedFuture;
 import static net.minecraft.server.RegistryLayer.DIMENSIONS;
 import static net.minecraft.server.packs.PackType.SERVER_DATA;
+import static top.qwertycxz.loadabledialog.RegistryInfoLookupImpl.STALE_PLAYERS;
 import static top.qwertycxz.loadabledialog.RegistryInfoLookupImpl.loadDialog;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.RegistryLayer;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.resources.MultiPackResourceManager;
+import net.minecraft.server.players.PlayerList;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.spongepowered.asm.mixin.Final;
@@ -25,6 +27,9 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 @Mixin(MinecraftServer.class)
 @NullMarked
 public abstract class MinecraftServerMixin {
+	@Shadow
+	@SuppressWarnings("null")
+	private PlayerList playerList;
 	@Final
 	@Mutable
 	@Shadow
@@ -38,8 +43,11 @@ public abstract class MinecraftServerMixin {
 			var manager = new MultiPackResourceManager(SERVER_DATA, resources);
 			try {
 				registries = old.replaceFrom(DIMENSIONS, loadDialog(old.getLayer(DIMENSIONS), old.getAccessForLoading(DIMENSIONS), manager));
-				return function.apply(resources).whenComplete((ok, e) -> {
-					if (e != null) {
+				return function.apply(resources).whenComplete((result, e) -> {
+					if (e == null) {
+						STALE_PLAYERS.addAll(playerList.getPlayers());
+					}
+					else {
 						registries = old;
 					}
 				});
