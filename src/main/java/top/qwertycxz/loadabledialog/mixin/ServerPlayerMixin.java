@@ -1,11 +1,11 @@
 package top.qwertycxz.loadabledialog.mixin;
 
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
+import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 import static java.util.Optional.empty;
+import static net.minecraft.core.Holder.Kind.REFERENCE;
 import static net.minecraft.core.Holder.direct;
-import static net.minecraft.network.chat.Component.translatable;
+import static net.minecraft.network.chat.Component.literal;
 import static net.minecraft.server.dialog.DialogAction.CLOSE;
 import static net.minecraft.server.dialog.NoticeDialog.DEFAULT_ACTION;
 import static net.minecraft.server.dialog.body.PlainMessage.DEFAULT_WIDTH;
@@ -32,14 +32,15 @@ public abstract class ServerPlayerMixin {
 	private static final Holder<@NonNull Dialog> STALE_DIALOG = direct(
 		new NoticeDialog(
 			new CommonDialogData(
-				translatable("dialog.stale.title"), requireNonNull(empty()), true, true, CLOSE, requireNonNull(singletonList((@Nullable PlainMessage)new PlainMessage(translatable("dialog.stale.body"), DEFAULT_WIDTH))), requireNonNull(emptyList())
+				literal("Reconnect Required"), requireNonNull(empty()), true, true, CLOSE,
+				requireNonNull(asList((@Nullable PlainMessage)new PlainMessage(literal("Dialogs have been reloaded. Please reconnect to the server to use this dialog."), DEFAULT_WIDTH))), requireNonNull(asList())
 			), DEFAULT_ACTION
 		)
 	);
 
 	@ModifyArg(method = "openDialog", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/protocol/common/ClientboundShowDialogPacket;<init>(Lnet/minecraft/core/Holder;)V"))
 	private Holder<@NonNull Dialog> staleDialog(Holder<@NonNull Dialog> dialog) {
-		if (STALE_PLAYERS.contains((Object)this)) return STALE_DIALOG;
+		if (dialog.kind() == REFERENCE && STALE_PLAYERS.contains((Object)this)) return STALE_DIALOG;
 		return dialog;
 	}
 }
