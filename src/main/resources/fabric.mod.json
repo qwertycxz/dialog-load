@@ -3,35 +3,36 @@
 	"authors": [
 		{
 			"contact": {
-				"GitHub": "$github",
-				"Ko-fi": "$kofi",
-				"homepage": "$homepage"
+				"GitHub": "$url_github",
+				"Ko-fi": "$url_kofi",
+				"homepage": "$url_homepage"
 			},
 			"name": "$developer"
 		}
 	],
 	"contact": {
 		"Central": "$central",
-		"Modrinth": "$modrinth",
-		"issues": "$issue",
-		"sources": "$scm"
+		"CurseForge": "$url_curseforge",
+		"Modrinth": "$url_modrinth",
+		"issues": "$url_issue",
+		"sources": "$url_scm"
 	},
 	"custom": {
 		"mc-publish": {
-			"curseforge": 1560532,
-			"modrinth": "zI606Zwl"
+			"curseforge": "$publish_curseforge",
+			"modrinth": "$publish_modrinth"
 		}
 	},
 	"depends": {
-		"minecraft": "$minecraft"
+		"minecraft": "$fabric_minecraft"
 	},
 	"description": "$description",
 	"environment": "server",
-	"icon": "icon.png",
+	"icon": "$file_icon",
 	"id": "$id",
 	"license": "$license",
 	"mixins": [
-		"mixins.json"
+		"$file_mixin"
 	],
 	"name": "$name",
 	"version": "$version"

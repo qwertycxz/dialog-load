@@ -1,0 +1,23 @@
+issueTrackerURL = '$url_issue'
+license = '$license'
+
+[[dependencies.'$id']]
+modId = 'minecraft'
+side = 'SERVER'
+versionRange = '$forge_minecraft'
+
+[mc-publish]
+curseforge = '$publish_curseforge'
+modrinth = '$publish_modrinth'
+
+[[mixins]]
+config = '$file_mixin'
+
+[[mods]]
+authors = '$developer'
+description = '$description'
+displayName = '$name'
+displayURL = '$url_scm'
+logoFile = '$file_icon'
+modId = '$id'
+version = '$version'

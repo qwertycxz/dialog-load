@@ -22,6 +22,7 @@ var MOD_CAPITAL = 'ReloadableDialog'
 var MOD_NAME = 'Reloadable Dialog'
 var MOD_SCM = "${DEVELOPER_SCM}/${MOD_CAPITAL}"
 var MOD_GITHUB = "${DEVELOPER_GITHUB}/${MOD_CAPITAL}"
+var CURSEFORGE = "https://www.curseforge.com/minecraft/mc-mods/${MOD_LOWERCASE}"
 var DESCRIPTION = 'Reload dialogs added in Minecraft 1.21.6 without restarting server,'
 var GROUP = 'top.qwertycxz'
 var HOMEPAGE = 'https://qwertycxz.top'
@@ -73,7 +74,7 @@ subprojects {
 				developerConnection = "scm:git:ssh://${MOD_SCM}"
 				url = MOD_GITHUB
 			}
-			url = MODRINTH
+			url = MOD_GITHUB
 		}
 		publishToMavenCentral()
 		signAllPublications()
@@ -97,25 +98,35 @@ subprojects {
 			}
 		}
 	}
-	var MINECRAFT = project.properties['minecraft']
+	var FABRIC = project.properties['fabric']
+	var FORGE = project.properties['forge']
 	processResources {
-		filesMatching('fabric.mod.json') {
+		filesMatching([
+			'fabric.mod.json',
+			'META-INF/neoforge.mods.toml',
+		]) {
 			expand(
 				central: "https://central.sonatype.com/artifact/${GROUP}/${MOD_LOWERCASE}",
+				fabric_minecraft: FABRIC,
+				forge_minecraft: FORGE,
 				description: DESCRIPTION,
 				developer: DEVELOPER_NAME,
-				github: DEVELOPER_GITHUB,
-				homepage: HOMEPAGE,
+				file_icon: "icon.png",
+				file_mixin: "mixins.json",
 				id: MOD_LOWERCASE,
-				issue: ISSUE,
-				kofi: KO_FI,
 				license: LICENSE,
-				minecraft: MINECRAFT,
-				modrinth: MODRINTH,
 				name: MOD_NAME,
+				publish_curseforge: "1560532",
+				publish_modrinth: "zI606Zwl",
 				schema: '''schemaVersion": 1,
 	"$schema''',
-				scm: MOD_GITHUB,
+				url_curseforge: CURSEFORGE,
+				url_github: DEVELOPER_GITHUB,
+				url_homepage: HOMEPAGE,
+				url_issue: ISSUE,
+				url_kofi: KO_FI,
+				url_modrinth: MODRINTH,
+				url_scm: MOD_GITHUB,
 				version: VERSION,
 				)
 		}
