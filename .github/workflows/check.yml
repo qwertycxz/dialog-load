@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+      - uses: actions/setup-java@main
+        with:
+          cache: gradle
+          distribution: graalvm
+          java-version: 25
+      - run: gradle check
+on:
+  - pull_request
+  - push
+permissions:
+  contents: read

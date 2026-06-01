@@ -1,0 +1,42 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow
+jobs:
+  package:
+    env:
+      ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGINMEMORYKEY }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+      - uses: actions/setup-java@main
+        with:
+          cache: gradle
+          distribution: graalvm
+          java-version: 25
+      - env:
+          ORG_GRADLE_PROJECT_GitHubPassword: ${{ secrets.GITHUB_TOKEN }}
+          ORG_GRADLE_PROJECT_GitHubUsername: ${{ secrets.GITHUB_ACTOR }}
+        run: gradle publishAllPublicationsToGitHubRepository
+      - env:
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.ORG_GRADLE_PROJECT_MAVENCENTRALPASSWORD }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.ORG_GRADLE_PROJECT_MAVENCENTRALUSERNAME }}
+        run: gradle publishAllPublicationsToMavenCentralRepository
+      - uses: Kir-Antipov/mc-publish@995edadc13559a8b28d0b7e6571229f067ec7659
+        with:
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          files: |
+            obfuscated/build/libs/!(*-@(dev|sources|javadoc)).jar
+            obfuscated/build/libs/*-@(dev|sources|javadoc).jar
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+      - uses: Kir-Antipov/mc-publish@995edadc13559a8b28d0b7e6571229f067ec7659
+        with:
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          files: |
+            unobfuscated/build/libs/!(*-@(dev|sources|javadoc)).jar
+            unobfuscated/build/libs/*-@(dev|sources|javadoc).jar
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+on:
+  release:
+    types:
+      - created
+permissions:
+  contents: read
+  packages: write
